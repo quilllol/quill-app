@@ -10,19 +10,19 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
 ]);
 
-async function createWindow(browserWindowOptions, mouseEvents) {
+async function createWindow(browserWindowOptions, mouseEvents, page) {
   // Create the browser window.
   const win = new BrowserWindow(browserWindowOptions);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    await win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/${page}`);
     win.setIgnoreMouseEvents(!mouseEvents);
     // if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    win.loadURL(`app://./${page}`);
   }
 }
 
@@ -66,7 +66,8 @@ app.on("ready", async () => {
         nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
       }
     },
-    true
+    true,
+    ""
   );
   await createWindow(
     {
@@ -76,6 +77,7 @@ app.on("ready", async () => {
       height: 300,
       x: width - 300 - 20,
       y: height - 300 - 20,
+      focusable: false,
       alwaysOnTop: true,
       webPreferences: {
         // Use pluginOptions.nodeIntegration, leave this alone
@@ -83,7 +85,8 @@ app.on("ready", async () => {
         nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
       }
     },
-    false
+    true,
+    "notification"
   );
 });
 
