@@ -14,7 +14,20 @@
     @mouseup="handleDrawStop"
     @mouseout="handleDrawStop"
   >
-    <path class="path" v-bind:d="generatePath(tempStroke)" />
+    <path
+      class="path"
+      v-for="({ d, time, length, delay }, i) in svgPaths"
+      v-bind:key="i"
+      v-bind:d="d"
+      v-bind:style="
+        `
+        stroke-dasharray: ${length};
+        stroke-dashoffset: ${length};
+        animation-duration: ${time}ms;
+        animation-delay: ${delay}ms;
+        `
+      "
+    />
   </svg>
 </template>
 
@@ -28,8 +41,9 @@ export default {
   name: "ReplayCanvas",
   setup() {
     const svgCanvas = ref(null);
+    const svgPaths = ref([]);
 
-    let generatePath = points => {
+    const generatePath = points => {
       let pathD = "";
       for (let i in points) {
         if (i === "0") {
@@ -39,6 +53,30 @@ export default {
         }
       }
       return pathD;
+    };
+
+    socket.on("draw", points => {
+      handleDrawEvent(points);
+    });
+
+    const handleDrawEvent = e => {
+      let pathDescription = generatePath(e);
+      let time = e[e.length - 1].time;
+      svgPaths.value.push({
+        d: pathDescription,
+        time: time,
+        length: pathLength(pathDescription),
+        delay: captureInterval * packetSize - captureInterval - time
+      });
+    };
+
+    const pathLength = path => {
+      let pathElement = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+      pathElement.setAttribute("d", path);
+      return pathElement.getTotalLength();
     };
 
     let mouseX = 0;
@@ -62,10 +100,11 @@ export default {
     const drawInterval = ref(null);
     const drawIntervalTime = ref(0);
     let captureInterval = 15;
+    const packetSize = 10;
 
     const handleDraw = () => {
       drawInterval.value = setInterval(() => {
-        if (drawIntervalTime.value === captureInterval * 10) {
+        if (drawIntervalTime.value === captureInterval * packetSize) {
           paginateStroke();
           drawIntervalTime.value = captureInterval;
           handleDraw();
@@ -93,16 +132,15 @@ export default {
       clearInterval(drawInterval.value);
       drawIntervalTime.value = 0;
       if (tempStroke.value.length > 1) {
-        console.log(tempStroke.value);
         socket.emit("draw", tempStroke.value);
       }
       tempStroke.value = [];
     };
 
     return {
+      svgPaths,
       svgCanvas,
       tempStroke,
-      generatePath,
       handleMouseMove,
       handleDraw,
       handleDrawStop
@@ -119,5 +157,13 @@ export default {
 
 .path {
   pointer-events: none;
+  stroke-dashoffset: 0;
+  animation: draw linear forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 </style>
