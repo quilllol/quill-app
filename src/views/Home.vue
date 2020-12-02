@@ -24,5 +24,6 @@ export default {
 #canvas {
   width: 300px;
   height: 300px;
+  border: #000000 1px solid;
 }
 </style>
