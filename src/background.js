@@ -1,9 +1,39 @@
 "use strict";
 
-import { app, screen, protocol, BrowserWindow } from "electron";
+import { app, screen, protocol, BrowserWindow, session } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import path from "path";
+import ipcMain from "./ipcMain";
 // import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
+
+app.on("web-contents-created", (event, contents) => {
+  contents.on("will-attach-webview", (event, webPreferences, params) => {
+    // Strip away preload scripts if unused or verify their location is legitimate
+    delete webPreferences.preload;
+    delete webPreferences.preloadURL;
+
+    // Disable Node.js integration
+    webPreferences.nodeIntegration = false;
+
+    // Verify URL being loaded
+    if (!params.src.startsWith("https://example.com/")) {
+      event.preventDefault();
+    }
+  });
+});
+
+// const URL = require("url").URL;
+
+app.on("web-contents-created", (event, contents) => {
+  contents.on("will-navigate", event => {
+    // const parsedUrl = new URL(navigationUrl);
+
+    // if (parsedUrl.origin !== "https://example.com") {
+    event.preventDefault();
+    // }
+  });
+});
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -22,7 +52,7 @@ async function createWindow(browserWindowOptions, mouseEvents, page) {
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL(`app://./${page}`);
+    await win.loadURL(`app://./${page}`);
   }
 }
 
@@ -45,22 +75,35 @@ app.on("activate", () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", async () => {
-  // if (isDevelopment && !process.env.IS_TEST) {
-  //   // Install Vue Devtools
-  //   try {
-  //     await installExtension(VUEJS_DEVTOOLS);
-  //   } catch (e) {
-  //     console.error("Vue Devtools failed to install:", e.toString());
-  //   }
-  // }
+  if (isDevelopment && !process.env.IS_TEST) {
+    // Install Vue Devtools
+    // try {
+    //   await installExtension(VUEJS_DEVTOOLS);
+    // } catch (e) {
+    //   console.error("Vue Devtools failed to install:", e.toString());
+    // }
+  } else {
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          "Content-Security-Policy": ["default-src 'none'"]
+        }
+      });
+    });
+  }
   let display = screen.getPrimaryDisplay();
   let width = display.workArea.width;
   let height = display.workArea.height;
   await createWindow(
     {
-      width: 1000,
-      height: 1000,
+      frame: false,
+      resizable: false,
+      width: 300,
+      height: 400,
       webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+        contextIsolation: true,
         // Use pluginOptions.nodeIntegration, leave this alone
         // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
         nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
@@ -80,14 +123,33 @@ app.on("ready", async () => {
       focusable: false,
       alwaysOnTop: true,
       webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+        contextIsolation: true,
         // Use pluginOptions.nodeIntegration, leave this alone
         // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
         nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
       }
     },
-    true,
+    false,
     "notification"
   );
+  ipcMain();
+  app.on("web-contents-created", (event, contents) => {
+    contents.setWindowOpenHandler(() => {
+      // In this example, we'll ask the operating system
+      // to open this event's url in the default browser.
+      //
+      // See the following item for considerations regarding what
+      // URLs should be allowed through to shell.openExternal.
+      // if (isSafeForExternalOpen(url)) {
+      //   setImmediate(() => {
+      //     shell.openExternal(url);
+      //   });
+      // }
+
+      return { action: "deny" };
+    });
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
