@@ -1,0 +1,96 @@
+name: Version and Build
+
+on:
+    push:
+        branches:
+            - "main"
+    workflow_dispatch:
+
+jobs:
+    version:
+        outputs:
+            version: ${{ steps.version.outputs.version }}
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+
+            -   name: Calcuate semantic version and generate changelog
+                id: version
+                run: npx -p conventional-changelog-conventionalcommits -p @semantic-release/git -p @semantic-release/changelog -p @semantic-release/exec -p semantic-release semantic-release
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            -   name: Upload RELEASENOTES.md
+                uses: actions/upload-artifact@v2.2.2
+                with:
+                    name: RELEASENOTES.md
+                    path: RELEASENOTES.md
+                    if-no-files-found: warn
+                    retention-days: 90
+    draft-release:
+        needs:
+            - version
+        if: ${{needs.version.outputs.version}} !== ""
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: actions/download-artifact@v2
+                with:
+                    name: RELEASENOTES.md
+
+            -   name: Draft release
+                uses: ncipollo/release-action@v1
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    tag: v${{needs.version.outputs.version}}
+                    bodyFile: RELEASENOTES.md
+                    draft: true
+    build:
+        needs:
+            - draft-release
+        runs-on: windows-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: actions/setup-node@v2
+
+            -   name: Install dependencies from npm
+                run: npm ci
+
+            -   name: Build installer and create latest.yml
+                run: npm run electron:build -- --win nsis --publish always
+                env:
+                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            -   name: Upload installer and latest.yml
+                uses: actions/upload-artifact@v2.2.2
+                with:
+                    name: Installer
+                    path: |
+                        dist_electron/*.exe
+                        dist_electron/latest.yml
+                    if-no-files-found: error
+                    retention-days: 90
+    publish-release:
+        needs:
+            - version
+            - build
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            
+            -   uses: actions/download-artifact@v2
+                with:
+                    name: RELEASENOTES.md
+
+            -   name: Publish release
+                uses: ncipollo/release-action@v1
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    tag: v${{needs.version.outputs.version}}
+                    bodyFile: RELEASENOTES.md
+                    allowUpdates: true
+                    draft: false

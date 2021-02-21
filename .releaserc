@@ -2,6 +2,7 @@
     "branches": [
         "main"
     ],
+    "repositoryUrl": "https://github.com/alexanderl19/quill-app.git",
     "plugins": [
         [
             "@semantic-release/commit-analyzer",
@@ -9,30 +10,17 @@
                 "preset": "conventionalcommits"
             }
         ],
+        "@semantic-release/changelog",
         [
             "@semantic-release/release-notes-generator",
             {
-                "preset": "conventionalcommits",
-                "commit": "commit",
-                "issue": "issues"
+                "preset": "conventionalcommits"
             }
         ],
         [
             "@semantic-release/npm",
             {
                 "npmPublish": false
-            }
-        ],
-        [
-            "@semantic-release/github",
-            {
-                "assets": [
-                    {
-                        "path": "dist_electron/*.exe",
-                        "label": "Installer"
-                    },
-                    "dist_electron/latest.yml"
-                ]
             }
         ],
         [
@@ -49,7 +37,7 @@
         [
             "@semantic-release/exec",
             {
-                "prepareCmd": "npm run electron:build -- --win nsis"
+                "successCmd": "echo \"::set-output name=version::${nextRelease.version}\";echo \"${nextRelease.notes}\" > RELEASENOTES.md"
             }
         ]
     ]

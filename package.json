@@ -1,6 +1,11 @@
 {
-  "name": "connect",
-  "version": "0.1.0",
+  "name": "quill-app",
+  "description": "Doodle together with Quill. Learn more at https://quill.lol.",
+  "author": {
+    "name": "Quill",
+    "email": "hello@quill.lol"
+  },
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,6 +15,10 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexanderl19/quill-app.git"
   },
   "main": "background.js",
   "dependencies": {
