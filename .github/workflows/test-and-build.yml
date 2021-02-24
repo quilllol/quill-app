@@ -1,0 +1,36 @@
+name: Test and Build
+
+on:
+    push:
+        branches:
+            - "**"
+            - "!main"
+    workflow_dispatch:
+
+jobs:
+    build:
+        needs:
+            - draft-release
+        runs-on: windows-latest
+
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: actions/setup-node@v2
+
+            -   name: Install dependencies from npm
+                run: npm ci
+
+            -   name: Build installer and create latest.yml
+                run: npm run electron:build -- --win nsis --publish always
+                env:
+                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            -   name: Upload installer and latest.yml
+                uses: actions/upload-artifact@v2.2.2
+                with:
+                    name: Installer
+                    path: |
+                        dist_electron/*.exe
+                        dist_electron/latest.yml
+                    if-no-files-found: error
+                    retention-days: 30
