@@ -2,7 +2,7 @@
     "branches": [
         "main"
     ],
-    "repositoryUrl": "https://github.com/alexanderl19/quill-app.git",
+    "repositoryUrl": "https://github.com/quilllol/quill-app.git",
     "plugins": [
         [
             "@semantic-release/commit-analyzer",
