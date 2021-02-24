@@ -5,6 +5,9 @@ on:
         branches:
             - "**"
             - "!main"
+    pull_request:
+        branches:
+            - "main"
     workflow_dispatch:
 
 jobs:
@@ -21,9 +24,7 @@ jobs:
                 run: npm ci
 
             -   name: Build installer and create latest.yml
-                run: npm run electron:build -- --win nsis --publish always
-                env:
-                    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                run: npm run electron:build -- --win nsis --publish never
 
             -   name: Upload installer and latest.yml
                 uses: actions/upload-artifact@v2.2.2
