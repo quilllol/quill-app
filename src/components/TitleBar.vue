@@ -26,20 +26,17 @@
 <script>
 export default {
   name: "TitleBar",
-  props: {
-    resizeable: {
-      type: Boolean,
-      default: true
-    }
-  },
-  methods: {
-    minimize() {
+  setup() {
+    const minimize = () => {
       window.api.minimize();
-    },
-    closeWindow() {
+    };
+
+    const closeWindow = () => {
       window.api.close();
-    }
-  }
+    };
+
+    return { minimize, closeWindow };
+  },
 };
 </script>
 

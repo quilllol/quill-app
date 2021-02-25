@@ -1,6 +1,6 @@
 <template>
   <div class="home"></div>
-  <title-bar :resizeable="false"></title-bar>
+  <title-bar></title-bar>
   <replay-canvas
     :points="points"
     :color="selectedColor"
@@ -45,23 +45,23 @@ export default {
       "1F75FE",
       "766EC8",
       "C154C1",
-      "F653A6"
+      "F653A6",
     ];
 
     const selectedColor = ref("EE204D");
 
-    const handleColorSelected = color => {
+    const handleColorSelected = (color) => {
       selectedColor.value = color;
     };
 
     const channel = ref("");
 
-    watch(channel, newChannel => {
+    watch(channel, (newChannel) => {
       window.api.setChannel(newChannel);
     });
 
     const version = ref("");
-    window.api.getVersion().then(r => {
+    window.api.getVersion().then((r) => {
       version.value = r;
     });
 
@@ -71,14 +71,14 @@ export default {
       selectedColor,
       handleColorSelected,
       channel,
-      version
+      version,
     };
   },
   components: {
     ReplayCanvas,
     TitleBar,
-    Color
-  }
+    Color,
+  },
 };
 </script>
 
