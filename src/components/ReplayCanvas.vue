@@ -41,18 +41,17 @@ export default {
   props: {
     color: {
       type: String,
-      required: true
     },
     channel: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const svgCanvas = ref(null);
     const svgPaths = ref([]);
 
-    const generatePath = points => {
+    const generatePath = (points) => {
       let pathD = "";
       for (let i in points) {
         if (i === "0") {
@@ -66,7 +65,7 @@ export default {
 
     const channel = toRef(props, "channel");
     socket.emit("joinChannel", channel);
-    watch(channel, channel => {
+    watch(channel, (channel) => {
       socket.emit("joinChannel", channel);
     });
 
@@ -74,13 +73,13 @@ export default {
       console.log(socket.connected); // true
     });
 
-    socket.on("draw", points => {
+    socket.on("draw", (points) => {
       handleDrawEvent(points);
     });
 
     const timeBeforeErase = 5000;
 
-    const handleDrawEvent = e => {
+    const handleDrawEvent = (e) => {
       let pathDescription = generatePath(e);
       let time = e[e.length - 1].time + captureInterval;
       let color = e[e.length - 1].color;
@@ -89,7 +88,7 @@ export default {
         time: time,
         color: color,
         length: pathLength(pathDescription),
-        delay: captureInterval * packetSize - time
+        delay: captureInterval * packetSize - time,
       };
       let pathElement = document.createElementNS(
         "http://www.w3.org/2000/svg",
@@ -115,7 +114,7 @@ export default {
       }, timeBeforeErase + strokeInfo.time + strokeInfo.delay);
     };
 
-    const pathLength = path => {
+    const pathLength = (path) => {
       let pathElement = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path"
@@ -127,7 +126,7 @@ export default {
     let mouseX = 0;
     let mouseY = 0;
 
-    const handleMouseMove = e => {
+    const handleMouseMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
@@ -136,7 +135,7 @@ export default {
       let boundingRectangle = svgCanvas.getBoundingClientRect();
       return {
         x: x - boundingRectangle.left,
-        y: y - boundingRectangle.top
+        y: y - boundingRectangle.top,
       };
     };
 
@@ -183,7 +182,7 @@ export default {
       tempStroke.value = [];
     };
 
-    const commitDraw = stroke => {
+    const commitDraw = (stroke) => {
       socket.emit("draw", stroke);
       handleDrawEvent(stroke);
     };
@@ -194,16 +193,15 @@ export default {
       tempStroke,
       handleMouseMove,
       handleDraw,
-      handleDrawStop
+      handleDrawStop,
     };
-  }
+  },
 };
 </script>
 
 <style scoped>
 #svgCanvas {
   display: block;
-  margin: 25px 0 0 0;
   width: 300px;
   height: 300px;
   z-index: 2;

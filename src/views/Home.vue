@@ -1,6 +1,6 @@
 <template>
-  <div class="home"></div>
   <title-bar></title-bar>
+  <div id="replay-canvas-parent"></div>
   <replay-canvas
     :points="points"
     :color="selectedColor"
@@ -83,6 +83,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#replay-canvas-parent {
+  margin: 25px 0 0 0;
+}
+
 #color-bar {
   background: #000000;
   width: calc(300px - 8px * 2);
