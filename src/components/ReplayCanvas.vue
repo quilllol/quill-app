@@ -203,13 +203,13 @@ export default {
 <style scoped>
 #svgCanvas {
   display: block;
-  margin: 20px 0 0 0;
+  margin: 25px 0 0 0;
   width: 300px;
   height: 300px;
   z-index: 2;
 }
 
-#svgCanvas::v-deep path {
+#svgCanvas:deep(path) {
   pointer-events: none;
   transition: stroke-dashoffset linear;
 }

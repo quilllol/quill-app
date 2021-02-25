@@ -1,34 +1,22 @@
 <template>
   <div class="title-bar">
-    <div id="drag-bar" class="unmaximized-margin">
-      <img id="logo" src="@/assets/logo.svg" alt="logo" />
-    </div>
-    <div id="controls-parent">
-      <div class="controls">
+    <img id="logo" src="@/assets/logo.svg" alt="logo" />
+    <div id="drag-bar"></div>
+    <div id="controls">
+      <div v-on:click="minimize">
         <img
           class="controls-icon"
           id="minimize"
           src="@/assets/minimize.svg"
           alt="minimize"
-          v-on:click="minimize"
         />
       </div>
-      <div class="controls" v-show="resizeable">
-        <img
-          class="controls-icon"
-          id="maximize"
-          src="@/assets/maximize.svg"
-          alt="maximize"
-          v-on:click="maximize"
-        />
-      </div>
-      <div class="controls">
+      <div v-on:click="closeWindow">
         <img
           class="controls-icon"
           id="close"
           src="@/assets/close.svg"
           alt="close"
-          v-on:click="closeWindow"
         />
       </div>
     </div>
@@ -44,23 +32,9 @@ export default {
       default: true
     }
   },
-  data() {
-    return {
-      maximized: false
-    };
-  },
   methods: {
     minimize() {
       window.api.minimize();
-    },
-    maximize() {
-      if (this.maximized) {
-        // Maximized -> Unmaximized
-        window.api.unmaximize();
-      } else {
-        // Unmaximized -> Maximized
-        window.api.maximize();
-      }
     },
     closeWindow() {
       window.api.close();
@@ -76,47 +50,37 @@ export default {
   top: 0;
   width: 100%;
   background-color: #000000;
-  height: 20px;
+  height: 25px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 }
 
 #drag-bar {
-  flex-grow: 1;
   -webkit-app-region: drag;
-}
-
-/* Used in methods to add or remove the drag-bar margin for window resizing */
-.unmaximized-margin {
-  margin: 2px 0 0 2px;
-  height: calc(100% - 2px);
+  height: 100%;
+  flex-grow: 1;
 }
 
 #logo {
-  margin-left: 2px;
-  width: 10px;
-  height: 10px;
+  -webkit-app-region: drag;
+  padding: calc((25px - 15px) / 2);
+  width: 15px;
+  height: 15px;
 }
 
-#controls-parent {
+#controls {
+  height: 100%;
   display: flex;
   flex-direction: row;
 }
 
-.controls {
+.controls-icon {
   -webkit-app-region: no-drag;
   cursor: pointer;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 6px;
-}
-
-.controls-icon {
-  width: 8px;
-  height: auto;
-  margin-left: 10px;
+  width: 10px;
+  height: 10px;
+  padding: calc((25px - 10px) / 2);
 }
 </style>
