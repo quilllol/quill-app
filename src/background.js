@@ -115,6 +115,7 @@ app.on("ready", async () => {
   let display = screen.getPrimaryDisplay();
   let width = display.workArea.width;
   let height = display.workArea.height;
+  await ipcMain();
   win = await createWindow(
     {
       frame: false,
@@ -158,7 +159,6 @@ app.on("ready", async () => {
     "notification",
     "index.html/#/notification"
   );
-  ipcMain();
   app.on("web-contents-created", (event, contents) => {
     contents.setWindowOpenHandler(() => {
       // In this example, we'll ask the operating system

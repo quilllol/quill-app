@@ -1,10 +1,14 @@
-import { ipcMain, BrowserWindow, webContents } from "electron";
+import { app, ipcMain, BrowserWindow, webContents } from "electron";
 
 const getBrowserWindow = webContents => {
   return BrowserWindow.fromWebContents(webContents);
 };
 
 export default () => {
+  ipcMain.handle("getVersion", () => {
+    return app.getVersion();
+  });
+
   ipcMain.handle("minimize", async e => {
     getBrowserWindow(e.sender).minimize();
   });

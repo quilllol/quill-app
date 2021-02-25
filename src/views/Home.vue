@@ -18,7 +18,7 @@
   <div id="info-bar">
     <button id="create-channel">New Channel</button>
     <input id="channel-code" placeholder="Channel Code" v-model="channel" />
-    <span id="version">v0.0.1</span>
+    <span id="version">v{{ version }}</span>
   </div>
 </template>
 
@@ -60,7 +60,19 @@ export default {
       window.api.setChannel(newChannel);
     });
 
-    return { points, colors, selectedColor, handleColorSelected, channel };
+    const version = ref("");
+    window.api.getVersion().then(r => {
+      version.value = r;
+    });
+
+    return {
+      points,
+      colors,
+      selectedColor,
+      handleColorSelected,
+      channel,
+      version
+    };
   },
   components: {
     ReplayCanvas,
