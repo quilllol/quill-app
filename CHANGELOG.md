@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/quilllol/quill-app/compare/v1.0.0...v1.1.0) (2021-02-25)
+
+
+### Features
+
+* auto update ([87cba51](https://github.com/quilllol/quill-app/commit/87cba5140318897717b18f1871e42ed8f68e3b4a))
+
 ## 1.0.0 (2021-02-25)
 
 
