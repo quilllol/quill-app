@@ -60,7 +60,10 @@ jobs:
             -   uses: actions/setup-node@v2
 
             -   name: Change version
-                run: npm version ${{ needs.version.outputs.version }}
+                run: |
+                    git config --global user.email "git@quill.lol"
+                    git config --global user.name "Quill"
+                    npm version ${{ needs.version.outputs.version }}
 
             -   name: Install dependencies from npm
                 run: npm ci
