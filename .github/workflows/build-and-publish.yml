@@ -32,7 +32,7 @@ jobs:
     draft-release:
         needs:
             - version
-        if: ${{needs.version.outputs.version}} !== ""
+        if: ${{ needs.version.outputs.version }} !== ""
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -45,20 +45,22 @@ jobs:
                 uses: ncipollo/release-action@v1
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
-                    tag: v${{needs.version.outputs.version}}
+                    tag: v${{ needs.version.outputs.version }}
                     bodyFile: RELEASENOTES.md
                     draft: true
     build:
         needs:
+            - version
             - draft-release
         runs-on: windows-latest
 
         steps:
             -   uses: actions/checkout@v2
-                with:
-                    ref: ${{ GITHUB_REF }}
 
             -   uses: actions/setup-node@v2
+
+            -   name: Change version
+                run: npm version ${{ needs.version.outputs.version }}
 
             -   name: Install dependencies from npm
                 run: npm ci
@@ -93,7 +95,7 @@ jobs:
                 uses: ncipollo/release-action@v1
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
-                    tag: v${{needs.version.outputs.version}}
+                    tag: v${{ needs.version.outputs.version }}
                     bodyFile: RELEASENOTES.md
                     allowUpdates: true
                     draft: false
