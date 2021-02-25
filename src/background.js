@@ -1,9 +1,12 @@
 "use strict";
 
 import { app, screen, protocol, BrowserWindow, session } from "electron";
+import { autoUpdater } from "electron-updater";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import path from "path";
 import ipcMain from "./ipcMain";
+
+autoUpdater.checkForUpdatesAndNotify();
 
 let win;
 let secondWin;

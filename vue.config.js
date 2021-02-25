@@ -6,7 +6,14 @@ module.exports = {
         productName: "Quill",
         win: {
           artifactName: "${productName} ${version}.${ext}"
-        }
+        },
+        publish: [
+          {
+            provider: "github",
+            owner: "quilllol",
+            repo: "quill-app"
+          }
+        ]
       }
     }
   }
