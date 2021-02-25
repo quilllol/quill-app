@@ -56,7 +56,7 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
                 with:
-                    ref: '$GITHUB_REF'
+                    ref: ${{ GITHUB_REF }}
 
             -   uses: actions/setup-node@v2
 
