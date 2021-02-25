@@ -34,7 +34,7 @@
 <script>
 import { ref, toRef, watch } from "vue";
 import io from "socket.io-client";
-const socket = io("http://localhost:3000", {});
+const socket = io("https://channels.quill.lol", {});
 
 export default {
   name: "ReplayCanvas",
@@ -68,6 +68,10 @@ export default {
     socket.emit("joinChannel", channel);
     watch(channel, channel => {
       socket.emit("joinChannel", channel);
+    });
+
+    socket.on("connect", () => {
+      console.log(socket.connected); // true
     });
 
     socket.on("draw", points => {
