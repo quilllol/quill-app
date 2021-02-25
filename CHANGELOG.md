@@ -1,3 +1,13 @@
+### [1.1.2](https://github.com/quilllol/quill-app/compare/v1.1.1...v1.1.2) (2021-02-25)
+
+
+### Bug Fixes
+
+* allow https://fonts.gstatic.com ([06bf2b2](https://github.com/quilllol/quill-app/commit/06bf2b291263721f715cdd69935cdb829c874e6e))
+* quill desktop no longer cuts off bottom ([2cf0dbb](https://github.com/quilllol/quill-app/commit/2cf0dbbac205bfc24495f063bf3293e05428b259))
+* refactor title bar ([daa9e81](https://github.com/quilllol/quill-app/commit/daa9e81ba2bb7fc268c39be36f34e15050a68656))
+* refactor title bar ([6d9c1df](https://github.com/quilllol/quill-app/commit/6d9c1df358c6fffe5c6bffccd05efda61e95289a))
+
 ### [1.1.1](https://github.com/quilllol/quill-app/compare/v1.1.0...v1.1.1) (2021-02-25)
 
 
