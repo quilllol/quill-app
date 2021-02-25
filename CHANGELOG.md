@@ -1,10 +1,3 @@
-### [1.0.1](https://github.com/quilllol/quill-app/compare/v1.0.0...v1.0.1) (2021-02-25)
-
-
-### Bug Fixes
-
-* close all windows when main window is closed ([aaad2d8](https://github.com/quilllol/quill-app/commit/aaad2d87748771fc0c426a80119d1c5155e17cb1))
-
 ## 1.0.0 (2021-02-24)
 
 
