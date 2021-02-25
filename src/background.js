@@ -4,11 +4,15 @@ import { app, screen, protocol, BrowserWindow, session } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import path from "path";
 import ipcMain from "./ipcMain";
+
+let win;
+let secondWin;
+
 // import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 app.on("web-contents-created", (event, contents) => {
-  contents.on("will-attach-webview", (event, webPreferences, params) => {
+  contents.on("will-attach-webview", (event, webPreferences) => {
     // Strip away preload scripts if unused or verify their location is legitimate
     delete webPreferences.preload;
     delete webPreferences.preloadURL;
@@ -17,9 +21,9 @@ app.on("web-contents-created", (event, contents) => {
     webPreferences.nodeIntegration = false;
 
     // Verify URL being loaded
-    if (!params.src.startsWith("https://example.com/")) {
-      event.preventDefault();
-    }
+    // if (!params.src.startsWith("https://example.com/")) {
+    event.preventDefault();
+    // }
   });
 });
 
@@ -40,20 +44,26 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
 ]);
 
-async function createWindow(browserWindowOptions, mouseEvents, page) {
+async function createWindow(
+  browserWindowOptions,
+  mouseEvents,
+  devPath,
+  prodPath
+) {
   // Create the browser window.
   const win = new BrowserWindow(browserWindowOptions);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/${page}`);
-    win.setIgnoreMouseEvents(!mouseEvents);
+    await win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/${devPath}`);
     // if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    await win.loadURL(`app://./${page}`);
+    await win.loadURL(`app://./${prodPath}`);
   }
+  win.setIgnoreMouseEvents(!mouseEvents);
+  return win;
 }
 
 // Quit when all windows are closed.
@@ -68,7 +78,12 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  if (win === null) {
+    win = createWindow("", "index.html");
+  }
+  if (secondWin === null) {
+    secondWin = createWindow("subpage", "subpage.html");
+  }
 });
 
 // This method will be called when Electron has finished
@@ -87,7 +102,9 @@ app.on("ready", async () => {
       callback({
         responseHeaders: {
           ...details.responseHeaders,
-          "Content-Security-Policy": ["default-src 'none'"]
+          "Content-Security-Policy": [
+            "default-src 'self' https://channels.quill.lol"
+          ]
         }
       });
     });
@@ -95,7 +112,7 @@ app.on("ready", async () => {
   let display = screen.getPrimaryDisplay();
   let width = display.workArea.width;
   let height = display.workArea.height;
-  await createWindow(
+  win = await createWindow(
     {
       frame: false,
       resizable: false,
@@ -110,9 +127,13 @@ app.on("ready", async () => {
       }
     },
     true,
-    ""
+    "",
+    "index.html"
   );
-  await createWindow(
+  win.on("close", () => {
+    app.quit();
+  });
+  secondWin = await createWindow(
     {
       transparent: true,
       frame: false,
@@ -131,7 +152,8 @@ app.on("ready", async () => {
       }
     },
     false,
-    "notification"
+    "notification",
+    "index.html/#/notification"
   );
   ipcMain();
   app.on("web-contents-created", (event, contents) => {
