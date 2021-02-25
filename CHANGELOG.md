@@ -1,3 +1,10 @@
+### [1.1.1](https://github.com/quilllol/quill-app/compare/v1.1.0...v1.1.1) (2021-02-25)
+
+
+### Bug Fixes
+
+* display correct version number ([92e349c](https://github.com/quilllol/quill-app/commit/92e349c45914e837d4b3344ee436ec2499a29bec))
+
 ## [1.1.0](https://github.com/quilllol/quill-app/compare/v1.0.0...v1.1.0) (2021-02-25)
 
 
