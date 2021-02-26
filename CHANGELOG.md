@@ -1,3 +1,10 @@
+### [1.3.1](https://github.com/quilllol/quill-app/compare/v1.3.0...v1.3.1) (2021-02-26)
+
+
+### Bug Fixes
+
+* strokes from others dont show up on quill desktop ([193e0b3](https://github.com/quilllol/quill-app/commit/193e0b3243d3c9574b7f40ee6f3d38f89e50c019))
+
 ## [1.3.0](https://github.com/quilllol/quill-app/compare/v1.2.0...v1.3.0) (2021-02-26)
 
 
