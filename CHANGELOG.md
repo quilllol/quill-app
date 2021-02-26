@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/quilllol/quill-app/compare/v1.2.0...v1.3.0) (2021-02-26)
+
+
+### Features
+
+* quill sketchpad to desktop transferred locally ([df6036d](https://github.com/quilllol/quill-app/commit/df6036d6d236a56585394fea04b6c60d607848f2))
+
 ## [1.2.0](https://github.com/quilllol/quill-app/compare/v1.1.2...v1.2.0) (2021-02-26)
 
 
