@@ -48,10 +48,10 @@ export default {
 
       socket.on("draw", (points) => {
         handleDrawEvent(points);
+        window.api.draw(points);
       });
     } else {
       window.api.onDraw((points) => {
-        console.log(points);
         handleDrawEvent(points);
       });
     }
