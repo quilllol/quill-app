@@ -1,3 +1,18 @@
+## [1.2.0](https://github.com/quilllol/quill-app/compare/v1.1.2...v1.2.0) (2021-02-26)
+
+
+### Features
+
+* add functionality to new channel button ([b45608d](https://github.com/quilllol/quill-app/commit/b45608dd78d2934c3389b652e324cf4f765e5584))
+
+
+### Bug Fixes
+
+* allow fonts to import properly from https://fonts.googleapis.com/ ([be30c31](https://github.com/quilllol/quill-app/commit/be30c31a2ee5bf360eacf4b202d3b819e663b073))
+* app icon for installer and tray icon ([f74d018](https://github.com/quilllol/quill-app/commit/f74d018211553c9b61c0f9fbc225301b207fc293))
+* disable quill sketchpad resizing ([b436b43](https://github.com/quilllol/quill-app/commit/b436b43e65325b22ca8c7c7113eb832a41c48d64))
+* make channel code case insensitive ([00aa482](https://github.com/quilllol/quill-app/commit/00aa4829418d79abb745b762b1de99aa1614cd93))
+
 ### [1.1.2](https://github.com/quilllol/quill-app/compare/v1.1.1...v1.1.2) (2021-02-25)
 
 
