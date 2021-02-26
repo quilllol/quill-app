@@ -119,6 +119,7 @@ app.on("ready", async () => {
   win = await createWindow(
     {
       frame: false,
+      resizable: false,
       width: 300,
       height: 405,
       webPreferences: {
