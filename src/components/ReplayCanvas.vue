@@ -64,9 +64,9 @@ export default {
     };
 
     const channel = toRef(props, "channel");
-    socket.emit("joinChannel", channel);
+    socket.emit("joinChannel", channel.value.toUpperCase());
     watch(channel, (channel) => {
-      socket.emit("joinChannel", channel);
+      socket.emit("joinChannel", channel.toUpperCase());
     });
 
     socket.on("connect", () => {
