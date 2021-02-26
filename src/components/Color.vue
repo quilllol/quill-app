@@ -14,14 +14,14 @@ export default {
   props: {
     color: {
       type: String,
-      required: true
+      required: true,
     },
     selected: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
-  emits: ["color-selected"]
+  emits: ["color-selected"],
 };
 </script>
 
