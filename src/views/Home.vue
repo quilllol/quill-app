@@ -2,8 +2,8 @@
   <title-bar></title-bar>
   <div id="replay-canvas-parent"></div>
   <replay-canvas
-    :points="points"
     :color="selectedColor"
+    :socketio="true"
     :channel="channel"
   ></replay-canvas>
   <div id="color-bar">
@@ -31,8 +31,6 @@ import Color from "@/components/Color.vue";
 export default {
   name: "Home",
   setup() {
-    const points = ref([]);
-
     const colors = [
       "EE204D",
       "FF5349",
@@ -72,7 +70,6 @@ export default {
     });
 
     return {
-      points,
       colors,
       selectedColor,
       handleColorSelected,

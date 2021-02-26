@@ -1,5 +1,5 @@
 <template>
-  <replay-canvas v-bind:points="points" :channel="channel"></replay-canvas>
+  <replay-canvas :channel="channel"></replay-canvas>
 </template>
 
 <script>
@@ -9,18 +9,16 @@ import ReplayCanvas from "@/components/ReplayCanvas";
 export default {
   name: "About",
   setup() {
-    const points = ref([]);
-
     const channel = ref("");
-    window.api.onSetChannel(newChannel => {
+    window.api.onSetChannel((newChannel) => {
       channel.value = newChannel;
     });
 
-    return { points, channel };
+    return { channel };
   },
   components: {
-    ReplayCanvas
-  }
+    ReplayCanvas,
+  },
 };
 </script>
 

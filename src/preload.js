@@ -8,7 +8,10 @@ contextBridge.exposeInMainWorld("api", {
   unmaximize: () => ipcRenderer.invoke("unmaximize"),
   maximize: () => ipcRenderer.invoke("maximize"),
   close: () => ipcRenderer.invoke("close"),
-  setChannel: channel => ipcRenderer.invoke("setChannel", channel),
-  onSetChannel: callback =>
-    ipcRenderer.on("setChannel", (event, ...args) => callback(...args))
+  setChannel: (channel) => ipcRenderer.invoke("setChannel", channel),
+  onSetChannel: (callback) =>
+    ipcRenderer.on("setChannel", (event, ...args) => callback(...args)),
+  draw: (points) => ipcRenderer.invoke("draw", points),
+  onDraw: (callback) =>
+    ipcRenderer.on("draw", (event, ...args) => callback(...args)),
 });

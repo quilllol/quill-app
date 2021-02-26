@@ -13,28 +13,12 @@
     @mousedown="handleDraw"
     @mouseup="handleDrawStop"
     @mouseout="handleDrawStop"
-  >
-    <!--    <path-->
-    <!--      class="path"-->
-    <!--      v-for="({ d, time, length, delay }, i) in svgPaths"-->
-    <!--      v-bind:key="i"-->
-    <!--      v-bind:d="d"-->
-    <!--      v-bind:style="-->
-    <!--        `-->
-    <!--            stroke-dasharray: ${length};-->
-    <!--            stroke-dashoffset: ${length};-->
-    <!--            animation-duration: ${time}ms;-->
-    <!--            animation-delay: ${delay}ms;-->
-    <!--            `-->
-    <!--      "-->
-    <!--    />-->
-  </svg>
+  ></svg>
 </template>
 
 <script>
 import { ref, toRef, watch } from "vue";
 import io from "socket.io-client";
-const socket = io("https://channels.quill.lol", {});
 
 export default {
   name: "ReplayCanvas",
@@ -42,12 +26,36 @@ export default {
     color: {
       type: String,
     },
+    socketio: {
+      type: Boolean,
+      default: false,
+    },
     channel: {
       type: String,
       required: true,
     },
   },
   setup(props) {
+    let socket;
+    if (props.socketio) {
+      socket = io("https://channels.quill.lol", {});
+
+      const channel = toRef(props, "channel");
+      socket.emit("joinChannel", channel.value.toUpperCase());
+      watch(channel, (channel) => {
+        socket.emit("joinChannel", channel.toUpperCase());
+      });
+
+      socket.on("draw", (points) => {
+        handleDrawEvent(points);
+      });
+    } else {
+      window.api.onDraw((points) => {
+        console.log(points);
+        handleDrawEvent(points);
+      });
+    }
+
     const svgCanvas = ref(null);
     const svgPaths = ref([]);
 
@@ -62,20 +70,6 @@ export default {
       }
       return pathD;
     };
-
-    const channel = toRef(props, "channel");
-    socket.emit("joinChannel", channel.value.toUpperCase());
-    watch(channel, (channel) => {
-      socket.emit("joinChannel", channel.toUpperCase());
-    });
-
-    socket.on("connect", () => {
-      console.log(socket.connected); // true
-    });
-
-    socket.on("draw", (points) => {
-      handleDrawEvent(points);
-    });
 
     const timeBeforeErase = 5000;
 
@@ -139,7 +133,7 @@ export default {
       };
     };
 
-    const tempStroke = ref([]);
+    let tempStroke = [];
 
     const drawInterval = ref(null);
     const drawIntervalTime = ref(0);
@@ -160,37 +154,40 @@ export default {
         );
         relativeMousePosition.time = drawIntervalTime.value;
         relativeMousePosition.color = props.color;
-        tempStroke.value.push(relativeMousePosition);
+        tempStroke.push(relativeMousePosition);
         drawIntervalTime.value += captureInterval;
       }, captureInterval);
     };
 
     const paginateStroke = () => {
       clearInterval(drawInterval.value);
-      commitDraw(tempStroke.value);
-      let previousEndPoint = tempStroke.value[tempStroke.value.length - 1];
+      commitDraw(tempStroke);
+      let previousEndPoint = tempStroke[tempStroke.length - 1];
       previousEndPoint.time = 0;
-      tempStroke.value = [previousEndPoint];
+      tempStroke = [previousEndPoint];
     };
 
     const handleDrawStop = () => {
       clearInterval(drawInterval.value);
       drawIntervalTime.value = 0;
-      if (tempStroke.value.length > 1) {
-        commitDraw(tempStroke.value);
+      if (tempStroke.length > 1) {
+        commitDraw(tempStroke);
       }
-      tempStroke.value = [];
+      tempStroke = [];
     };
 
-    const commitDraw = (stroke) => {
-      socket.emit("draw", stroke);
-      handleDrawEvent(stroke);
+    const commitDraw = (points) => {
+      if (props.socketio) {
+        socket.emit("draw", points);
+      }
+      window.api.draw(points);
+      handleDrawEvent(points);
     };
 
     return {
       svgPaths,
       svgCanvas,
-      tempStroke,
+
       handleMouseMove,
       handleDraw,
       handleDrawStop,
