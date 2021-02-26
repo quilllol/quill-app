@@ -16,7 +16,7 @@
     ></color>
   </div>
   <div id="info-bar">
-    <button id="create-channel">New Channel</button>
+    <button id="create-channel" @click="newChannel">New Channel</button>
     <input id="channel-code" placeholder="Channel Code" v-model="channel" />
     <span id="version">v{{ version }}</span>
   </div>
@@ -60,6 +60,12 @@ export default {
       window.api.setChannel(newChannel);
     });
 
+    const newChannel = () => {
+      channel.value = [...Array(5)]
+        .map(() => (~~(Math.random() * 36)).toString(36))
+        .join("");
+    };
+
     const version = ref("");
     window.api.getVersion().then((r) => {
       version.value = r;
@@ -71,6 +77,7 @@ export default {
       selectedColor,
       handleColorSelected,
       channel,
+      newChannel,
       version,
     };
   },
