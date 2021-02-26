@@ -106,7 +106,7 @@ app.on("ready", async () => {
         responseHeaders: {
           ...details.responseHeaders,
           "Content-Security-Policy": [
-            "default-src 'self' https://channels.quill.lol https://fonts.gstatic.com",
+            "default-src 'self' https://channels.quill.lol https://fonts.gstatic.com https://fonts.googleapis.com/;",
           ],
         },
       });
@@ -119,7 +119,6 @@ app.on("ready", async () => {
   win = await createWindow(
     {
       frame: false,
-      resizable: false,
       width: 300,
       height: 405,
       webPreferences: {
