@@ -3,13 +3,13 @@
     <p align="center">Doodle together with Quill</p>
 </div>
 
-![Quill Sketchpad](images/Quill 1.png)
+![Quill Sketchpad](images/Quill1.png)
 
 ---
 
 ## Download
 
-####[Latest Release](https://github.com/quilllol/quill-app/releases/latest)
+**[Latest Release](https://github.com/quilllol/quill-app/releases/latest)**
 
 ```diff
 - Windows may indicate that the installer is not -
@@ -32,7 +32,7 @@ Your place to doodle. Transferred instantaneously to your channel’s sketchpads
 
 Quill Desktop is a completely transparent canvas for your friends to say hi.
 
-![Quill Desktop](images/Quill 2.png)
+![Quill Desktop](images/Quill2.png)
 
 ---
 
