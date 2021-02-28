@@ -11,14 +11,8 @@
 
 **[Latest Release](https://github.com/quilllol/quill-app/releases/latest)**
 
-```diff
-- Windows may indicate that the installer is not -
-- commonly downloaded.                           -
--                                                -
-- If this warning is displayed, click            -
-- "More Info" and "Run Anyways" to run the       -
-- installer.                                     -
-```
+![Windows Installer Warning (Windows may indicate that the installer is not commonly downloaded.
+If this warning is displayed, click “More Info” and “Run Anyways” to run the installer.)](images/WindowsWarning.png | width=500)
 
 ---
 
