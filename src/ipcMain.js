@@ -4,7 +4,7 @@ const getBrowserWindow = (webContents) => {
   return BrowserWindow.fromWebContents(webContents);
 };
 
-export default () => {
+export default (launchOptions) => {
   ipcMain.handle("getVersion", () => {
     return app.getVersion();
   });
@@ -22,7 +22,11 @@ export default () => {
   });
 
   ipcMain.handle("close", async (e) => {
-    getBrowserWindow(e.sender).close();
+    if (launchOptions.minimizeOnClose) {
+      getBrowserWindow(e.sender).hide();
+    } else {
+      getBrowserWindow(e.sender).close();
+    }
   });
 
   ipcMain.handle("setChannel", async (e, channel) => {
