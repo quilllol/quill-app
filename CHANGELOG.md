@@ -1,3 +1,10 @@
+### [1.4.1](https://github.com/quilllol/quill-app/compare/v1.4.0...v1.4.1) (2021-03-01)
+
+
+### Bug Fixes
+
+* open at login option does not persist ([ecb5451](https://github.com/quilllol/quill-app/commit/ecb5451a7d5e7df796e9c5317ac3985b5e4c42e9))
+
 ## [1.4.0](https://github.com/quilllol/quill-app/compare/v1.3.1...v1.4.0) (2021-03-01)
 
 
