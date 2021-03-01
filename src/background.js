@@ -40,7 +40,7 @@ const setupTrayIcon = () => {
 
   const handleLaunchOptions = {
     set: function (obj, prop, value) {
-      if (prop === "launchOptions") {
+      if (prop === "openAtLogin") {
         app.setLoginItemSettings({ openAtLogin: value });
       } else {
         obj[prop] = value;
