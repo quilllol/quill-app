@@ -123,7 +123,7 @@ const setupTrayIcon = () => {
         }
       );
       app.setLoginItemSettings({ openAtLogin: true });
-      launchOptions.launchMinimized = true;
+      launchOptions.openAtLogin = true;
       launchOptions.launchMinimized = false;
       launchOptions.minimizeOnClose = true;
       setContextMenu();
