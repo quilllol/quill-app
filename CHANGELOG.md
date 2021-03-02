@@ -1,3 +1,10 @@
+## [1.5.0](https://github.com/quilllol/quill-app/compare/v1.4.2...v1.5.0) (2021-03-02)
+
+
+### Features
+
+* focus original instance if app is launched again ([25da79c](https://github.com/quilllol/quill-app/commit/25da79cf373efc400df778584e9a4cdc8b8a2e0e))
+
 ### [1.4.2](https://github.com/quilllol/quill-app/compare/v1.4.1...v1.4.2) (2021-03-01)
 
 
