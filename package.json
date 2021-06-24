@@ -46,7 +46,7 @@
     "prettier": "^2.3.1",
     "sass": "^1.35.1",
     "sass-loader": "^8.0.2",
-    "vue-cli-plugin-electron-builder": "~2.0.0"
+    "vue-cli-plugin-electron-builder": "~2.1.0"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
