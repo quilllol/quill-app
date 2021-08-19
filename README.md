@@ -1,5 +1,9 @@
 <div>
-    <h2 align="center">Quill</h2>
+    <h1 align="center">Quill</h1>
+    <div align="center">
+        <a href="https://codeclimate.com/github/quilllol/quill-app/maintainability"><img src="https://api.codeclimate.com/v1/badges/da7a4ca9c67dfe849cef/maintainability" /></a>
+        <a href="https://codeclimate.com/github/quilllol/quill-app/test_coverage"><img src="https://api.codeclimate.com/v1/badges/da7a4ca9c67dfe849cef/test_coverage" /></a>
+    </div>
     <p align="center">Doodle together with Quill</p>
 </div>
 
